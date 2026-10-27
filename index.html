@@ -1,0 +1,1370 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>خبرخوان - نسخه موبایل</title>
+  <style>
+    :root {
+      --bg-main: #060913;
+      --bg-surface: #0f172a;
+      --bg-card: #151f38;
+      --gold: #f59e0b;
+      --gold-light: #fbbf24;
+      --emerald: #10b981;
+      --crimson: #ef4444;
+      --cyan: #38bdf8;
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --border-soft: rgba(255, 255, 255, 0.09);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      background-color: var(--bg-main);
+      color: var(--text-primary);
+      font-family: Tahoma, 'Segoe UI', Roboto, sans-serif;
+      overflow-x: hidden;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      padding-bottom: 74px; /* Space for bottom nav */
+      background-image: 
+        radial-gradient(circle at 10% 5%, rgba(245, 158, 11, 0.14) 0%, transparent 35%),
+        radial-gradient(circle at 90% 15%, rgba(16, 185, 129, 0.12) 0%, transparent 35%);
+    }
+
+    /* Animations */
+    @keyframes pulseLive {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.4); opacity: 0.45; }
+    }
+
+    @keyframes spinRing {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes tickerSlide {
+      0% { transform: translate3d(-100%, 0, 0); }
+      100% { transform: translate3d(100%, 0, 0); }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Sticky Top Header */
+    .mobile-header {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      background: rgba(10, 15, 29, 0.96);
+      border-bottom: 1px solid rgba(245, 158, 11, 0.28);
+      padding: 10px 14px 8px 14px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+    }
+
+    .header-top-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .app-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #10b981 0%, #f59e0b 50%, #ef4444 100%);
+      padding: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 12px rgba(245, 158, 11, 0.35);
+    }
+
+    .brand-icon-inner {
+      width: 100%;
+      height: 100%;
+      background: #070b14;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 21px;
+    }
+
+    .brand-name {
+      font-size: 19px;
+      font-weight: 900;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .brand-tag {
+      font-size: 10px;
+      background: linear-gradient(90deg, #f59e0b, #d97706);
+      color: #000;
+      padding: 2px 7px;
+      border-radius: 10px;
+      font-weight: bold;
+    }
+
+    .brand-subtitle {
+      font-size: 10px;
+      color: var(--gold-light);
+      margin-top: 2px;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sync-pill-btn {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.22), rgba(6, 95, 70, 0.4));
+      border: 1px solid rgba(16, 185, 129, 0.5);
+      color: #a7f3d0;
+      padding: 7px 11px;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+    }
+
+    .sync-pill-btn:active {
+      transform: scale(0.95);
+    }
+
+    /* 3-Calendar Bar */
+    .calendar-strip {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 4px;
+      background: #070b14;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      padding: 5px 8px;
+      font-size: 10px;
+      font-weight: bold;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+
+    .cal-item {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .cal-shah { color: #fde68a; }
+    .cal-shamsi { color: #6ee7b7; }
+    .cal-miladi { color: #7dd3fc; direction: ltr; }
+    .cal-clock {
+      font-family: monospace;
+      font-size: 11px;
+      color: #fff;
+      background: rgba(56, 189, 248, 0.2);
+      padding: 2px 6px;
+      border-radius: 6px;
+    }
+
+    /* Breaking News Ticker */
+    .breaking-bar {
+      display: flex;
+      align-items: center;
+      background: #0b1120;
+      border-bottom: 1px solid rgba(239, 68, 68, 0.35);
+      height: 30px;
+      overflow: hidden;
+    }
+
+    .breaking-badge {
+      background: linear-gradient(90deg, #dc2626, #991b1b);
+      color: #fff;
+      font-size: 10px;
+      font-weight: bold;
+      height: 100%;
+      padding: 0 10px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      flex-shrink: 0;
+      z-index: 2;
+    }
+
+    .live-dot {
+      width: 6px;
+      height: 6px;
+      background: #fff;
+      border-radius: 50%;
+      animation: pulseLive 1.1s infinite;
+    }
+
+    .breaking-track {
+      flex: 1;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .breaking-text {
+      display: inline-block;
+      font-size: 11px;
+      color: #fde68a;
+      animation: tickerSlide 32s linear infinite;
+    }
+
+    /* Stories Row (Instagram Live Style) */
+    .stories-section {
+      padding: 12px 12px 8px 12px;
+      overflow-x: auto;
+      display: flex;
+      gap: 12px;
+      scrollbar-width: none;
+    }
+    .stories-section::-webkit-scrollbar { display: none; }
+
+    .story-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      width: 68px;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+
+    .story-ring {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      padding: 3px;
+      background: linear-gradient(135deg, #f59e0b, #ef4444, #10b981);
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .story-avatar {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: #111827;
+      border: 2px solid #060913;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+    }
+
+    .story-live-tag {
+      position: absolute;
+      bottom: -3px;
+      background: #dc2626;
+      color: #fff;
+      font-size: 8px;
+      font-weight: bold;
+      padding: 1px 5px;
+      border-radius: 6px;
+      border: 1px solid #060913;
+    }
+
+    .story-label {
+      font-size: 10px;
+      color: #e2e8f0;
+      text-align: center;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 100%;
+      font-weight: bold;
+    }
+
+    /* Docked Live TV Player */
+    .live-player-dock {
+      margin: 4px 12px 10px 12px;
+      background: #0b1120;
+      border: 1px solid rgba(245, 158, 11, 0.45);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.65);
+    }
+
+    .player-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 12px;
+      background: linear-gradient(90deg, #1e293b, #0f172a);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .player-ch-title {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 13px;
+      font-weight: bold;
+      color: #fff;
+    }
+
+    .player-toggle-btn {
+      background: rgba(255, 255, 255, 0.1);
+      color: #cbd5e1;
+      border: none;
+      padding: 4px 9px;
+      border-radius: 8px;
+      font-size: 11px;
+      cursor: pointer;
+    }
+
+    .player-video-wrap {
+      width: 100%;
+      height: 205px;
+      background: #000;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .channel-pills-bar {
+      display: flex;
+      gap: 7px;
+      padding: 9px 10px;
+      overflow-x: auto;
+      background: #090e1a;
+      scrollbar-width: none;
+    }
+    .channel-pills-bar::-webkit-scrollbar { display: none; }
+
+    .ch-pill {
+      background: #162038;
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      color: #cbd5e1;
+      padding: 6px 11px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: bold;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .ch-pill.active {
+      background: linear-gradient(90deg, #d97706, #b45309);
+      color: #fff;
+      border-color: #fbbf24;
+      box-shadow: 0 0 10px rgba(245, 158, 11, 0.4);
+    }
+
+    /* Category Filter Chips */
+    .filter-chips {
+      display: flex;
+      gap: 8px;
+      padding: 4px 12px 10px 12px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .filter-chips::-webkit-scrollbar { display: none; }
+
+    .chip {
+      background: rgba(30, 41, 59, 0.75);
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      color: #94a3b8;
+      padding: 7px 14px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: bold;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+
+    .chip.active {
+      background: rgba(56, 189, 248, 0.18);
+      border-color: var(--cyan);
+      color: #fff;
+    }
+
+    /* Mobile News Feed Cards */
+    .feed-container {
+      padding: 0 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .news-card {
+      background: linear-gradient(180deg, #151f38 0%, #0f172a 100%);
+      border: 1px solid rgba(148, 163, 184, 0.16);
+      border-radius: 16px;
+      overflow: hidden;
+      animation: fadeUp 0.22s ease-out;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+    }
+
+    .card-top-banner {
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .source-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .source-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.35);
+    }
+
+    .source-name {
+      font-size: 13px;
+      font-weight: bold;
+      color: #fff;
+    }
+
+    .source-handle {
+      font-size: 11px;
+      color: var(--gold-light);
+      direction: ltr;
+      text-align: right;
+    }
+
+    .post-type-badge {
+      font-size: 10px;
+      font-weight: bold;
+      padding: 4px 8px;
+      border-radius: 8px;
+      background: rgba(0, 0, 0, 0.4);
+      color: #e2e8f0;
+    }
+
+    .card-content {
+      padding: 13px 14px;
+    }
+
+    .card-headline {
+      font-size: 14px;
+      font-weight: bold;
+      color: #f8fafc;
+      line-height: 1.55;
+      margin-bottom: 8px;
+    }
+
+    .card-excerpt {
+      font-size: 12.5px;
+      color: #cbd5e1;
+      line-height: 1.65;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .card-actions {
+      padding: 9px 14px;
+      background: rgba(9, 13, 24, 0.55);
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .time-stamp {
+      font-size: 11px;
+      color: #64748b;
+    }
+
+    .action-btns {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-read {
+      background: rgba(245, 158, 11, 0.16);
+      border: 1px solid rgba(245, 158, 11, 0.45);
+      color: #fde68a;
+      padding: 5px 11px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .btn-direct {
+      background: rgba(56, 189, 248, 0.14);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      color: #bae6fd;
+      padding: 5px 11px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: bold;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    /* Bottom Navigation Bar */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 64px;
+      background: rgba(10, 15, 29, 0.98);
+      border-top: 1px solid rgba(245, 158, 11, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      z-index: 60;
+      padding: 0 6px;
+      box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.65);
+    }
+
+    .b-nav-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      color: #64748b;
+      background: none;
+      border: none;
+      padding: 6px 0;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .b-nav-item.active {
+      color: var(--gold-light);
+    }
+
+    .b-nav-icon {
+      font-size: 20px;
+    }
+
+    .b-nav-label {
+      font-size: 10px;
+      font-weight: bold;
+    }
+
+    /* Slide-Up Bottom Sheet Modal */
+    .sheet-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.82);
+      z-index: 100;
+      display: none;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+
+    .sheet-overlay.open {
+      display: flex;
+    }
+
+    .sheet-box {
+      background: #0f172a;
+      border-top: 2px solid var(--gold);
+      border-radius: 22px 22px 0 0;
+      max-height: 88vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      animation: fadeUp 0.2s ease-out;
+    }
+
+    .sheet-header {
+      padding: 14px 16px;
+      background: #162038;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .sheet-close {
+      background: #ef4444;
+      color: #fff;
+      border: none;
+      padding: 6px 14px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .sheet-body {
+      padding: 18px 16px 28px 16px;
+      overflow-y: auto;
+      line-height: 1.85;
+      font-size: 14.5px;
+      color: #f1f5f9;
+    }
+
+    /* Add Source Form */
+    .form-input {
+      width: 100%;
+      background: #070b14;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      color: #fff;
+      padding: 11px 12px;
+      border-radius: 10px;
+      font-size: 13px;
+      margin-bottom: 10px;
+      font-family: inherit;
+    }
+
+    .btn-submit {
+      width: 100%;
+      background: linear-gradient(90deg, #f59e0b, #d97706);
+      color: #000;
+      font-weight: 900;
+      border: none;
+      padding: 12px;
+      border-radius: 12px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- STICKY HEADER -->
+  <header class="mobile-header">
+    <div class="header-top-row">
+      <div class="app-brand">
+        <div class="brand-icon">
+          <div class="brand-icon-inner">🦁</div>
+        </div>
+        <div>
+          <div class="brand-name">
+            خبرخوان
+            <span class="brand-tag">انقلاب ملی</span>
+          </div>
+          <div class="brand-subtitle">جنگ با جمهوری اسلامی • بازپس‌گیری و آزادی ایران</div>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button class="sync-pill-btn" id="sync-btn" onclick="syncTelegramLive()">
+          <span>🔄</span> بروزرسانی زنده
+        </button>
+      </div>
+    </div>
+
+    <!-- 3 CALENDARS STRIP -->
+    <div class="calendar-strip">
+      <div class="cal-item cal-shah" id="date-imperial">👑 ۲۵۸۵ شاهنشاهی</div>
+      <div class="cal-item cal-shamsi" id="date-solar">☀️ ۱۴۰۵ خورشیدی</div>
+      <div class="cal-item cal-miladi" id="date-greg">🌍 2026</div>
+      <div class="cal-clock" id="clock-display">00:00</div>
+    </div>
+  </header>
+
+  <!-- BREAKING NEWS BAR -->
+  <div class="breaking-bar">
+    <div class="breaking-badge">
+      <span class="live-dot"></span>
+      خبر فوری
+    </div>
+    <div class="breaking-track">
+      <div class="breaking-text">
+        ⚡ پوشش لحظه‌به‌لحظه در خبرخوان: کانال رسمی شاهزاده رضا پهلوی (@rezapahlavi_officiall) • ستاد ارتباطات (@rezapahlavicomms) • اتاق خبر جنگ فرزاد زرین (@farzadzarrin) • تحلیل‌های نظامی آرش اعلایی • پخش زنده ایران اینترنشنال، صدای آمریکا VOA و شبکه انقلاب ملی شیر و خورشید...
+      </div>
+    </div>
+  </div>
+
+  <!-- STORIES ROW (QUICK ACCESS) -->
+  <section class="stories-section" id="stories-row">
+    <!-- Populated by JS -->
+  </section>
+
+  <!-- DOCKED LIVE TV PLAYER -->
+  <section class="live-player-dock" id="player-dock">
+    <div class="player-header">
+      <div class="player-ch-title">
+        <span class="live-dot" style="background:#ef4444;"></span>
+        <span id="active-tv-title">شبکه انقلاب ملی شیر و خورشید</span>
+      </div>
+      <button class="player-toggle-btn" onclick="togglePlayerExpand()" id="toggle-player-btn">
+        کوچک کردن ▲
+      </button>
+    </div>
+
+    <div class="player-video-wrap" id="video-stage">
+      <!-- Populated by JS -->
+    </div>
+
+    <div class="channel-pills-bar" id="tv-pills-bar">
+      <!-- Populated by JS -->
+    </div>
+  </section>
+
+  <!-- FILTER CHIPS -->
+  <div class="filter-chips">
+    <div class="chip active" onclick="setFeedFilter('all', this)">🔥 همه خبرها</div>
+    <div class="chip" onclick="setFeedFilter('telegram', this)">✈️ کانال‌های تلگرام</div>
+    <div class="chip" onclick="setFeedFilter('youtube', this)">▶️ یوتیوب و تحلیل جنگ</div>
+    <div class="chip" onclick="openTelegramWebSheet('rezapahlavi_officiall')">👑 تلگرام شاهزاده</div>
+    <div class="chip" onclick="openTelegramWebSheet('farzadzarrin')">🎙️ تلگرام فرزاد زرین</div>
+  </div>
+
+  <!-- MAIN NEWS FEED -->
+  <main class="feed-container" id="feed-list">
+    <!-- Populated by JS -->
+  </main>
+
+  <!-- SLIDE-UP BOTTOM SHEET (READER / LIVE CHANNEL / ADD SOURCE) -->
+  <div class="sheet-overlay" id="bottom-sheet" onclick="if(event.target===this) closeSheet()">
+    <div class="sheet-box">
+      <div class="sheet-header">
+        <div style="font-size: 14px; font-weight: bold; color: #fbbf24;" id="sheet-title">جزئیات خبر</div>
+        <button class="sheet-close" onclick="closeSheet()">✖ بستن</button>
+      </div>
+      <div class="sheet-body" id="sheet-content"></div>
+    </div>
+  </div>
+
+  <!-- FIXED BOTTOM NAVIGATION -->
+  <nav class="bottom-nav">
+    <button class="b-nav-item active" onclick="switchBottomTab('home', this)">
+      <span class="b-nav-icon">🏠</span>
+      <span class="b-nav-label">پیشخوان</span>
+    </button>
+    <button class="b-nav-item" onclick="switchBottomTab('tv', this)">
+      <span class="b-nav-icon">📺</span>
+      <span class="b-nav-label">تلویزیون زنده</span>
+    </button>
+    <button class="b-nav-item" onclick="switchBottomTab('telegram', this)">
+      <span class="b-nav-icon">✈️</span>
+      <span class="b-nav-label">تلگرام</span>
+    </button>
+    <button class="b-nav-item" onclick="switchBottomTab('youtube', this)">
+      <span class="b-nav-icon">▶️</span>
+      <span class="b-nav-label">یوتیوب</span>
+    </button>
+    <button class="b-nav-item" onclick="openAddSourceModal()">
+      <span class="b-nav-icon">➕</span>
+      <span class="b-nav-label">افزودن کانال</span>
+    </button>
+  </nav>
+
+  <script>
+    // ==========================================
+    // 1. LIVE TV CHANNELS
+    // ==========================================
+    const tvChannels = [
+      {
+        id: 'lion-sun',
+        name: 'انقلاب ملی شیر و خورشید',
+        icon: '🦁',
+        badge: 'ویژه انقلاب ملی',
+        desc: 'پوشش زنده فراخوان‌ها، سخنرانی‌های شاهزاده رضا پهلوی و خیزش سراسری مردم ایران',
+        ytChannelId: 'UCat6bC0Wrqq9Bcq7EkH_yQw',
+        externalUrl: 'https://www.youtube.com/@OfficialRezaPahlavi'
+      },
+      {
+        id: 'iran-intl',
+        name: 'ایران اینترنشنال',
+        icon: '🔴',
+        badge: 'پخش زنده ۲۴ ساعته',
+        desc: 'پوشش لحظه‌به‌لحظه اخبار جنگ با جمهوری اسلامی و عملیات نظامی',
+        ytChannelId: 'UCat6bC0Wrqq9Bcq7EkH_yQw',
+        externalUrl: 'https://www.youtube.com/@IranIntl/live'
+      },
+      {
+        id: 'voa-farsi',
+        name: 'صدای آمریکا (VOA فارسی)',
+        icon: '🗽',
+        badge: 'پخش زنده خبری',
+        desc: 'گزارش‌های ویژه واشنگتن، کاخ سفید و تحولات بین‌المللی آزادی ایران',
+        ytChannelId: 'UCttfDeGMwUxPjnlsKagcwKw',
+        externalUrl: 'https://www.youtube.com/@VOAFarsi/live'
+      },
+      {
+        id: 'fox-news',
+        name: 'فاکس نیوز (Fox News)',
+        icon: '🇺🇸',
+        badge: 'اتاق جنگ • انگلیسی',
+        desc: 'پوشش زنده تصمیمات نظامی آمریکا و ائتلاف جهانی علیه رژیم',
+        ytChannelId: 'UCXIJgqnII2ZOINSWNOGFThA',
+        externalUrl: 'https://www.youtube.com/@FoxNews/live'
+      },
+      {
+        id: 'bbc-persian',
+        name: 'بی‌بی‌سی فارسی',
+        icon: '🌐',
+        badge: 'پخش زنده',
+        desc: 'بخش‌های خبری و تحلیل تحولات منطقه',
+        ytChannelId: 'UCHZk9MrT3DGWmVqdsj5y0EA',
+        externalUrl: 'https://www.youtube.com/@BBCPersian/live'
+      },
+      {
+        id: 'irib-khabar',
+        name: 'شبکه خبر (رصد رژیم)',
+        icon: '📡',
+        badge: 'مانیتورینگ',
+        desc: 'رصد مواضع و واکنش‌های رسانه‌ای درون ساختار حکومت',
+        ytChannelId: '',
+        externalUrl: 'https://www.telewebion.com/live/khabar'
+      }
+    ];
+
+    // ==========================================
+    // 2. STORIES (TOP QUICK BAR)
+    // ==========================================
+    const storiesData = [
+      { title: 'شاهزاده', icon: '👑', action: () => openTelegramWebSheet('rezapahlavi_officiall'), live: 'تلگرام' },
+      { title: 'ستاد ارتباطات', icon: '🏛️', action: () => openTelegramWebSheet('rezapahlavicomms'), live: 'رسمی' },
+      { title: 'فرزاد زرین', icon: '🎙️', action: () => openTelegramWebSheet('farzadzarrin'), live: 'اتاق جنگ' },
+      { title: 'آرش اعلایی', icon: '🎯', action: () => openExternalLink('https://www.youtube.com/results?search_query=Arash+Alaee+Iran'), live: 'یوتیوب' },
+      { title: 'اینترنشنال', icon: '🔴', action: () => selectTVChannel(1), live: 'LIVE' },
+      { title: 'VOA فارسی', icon: '🗽', action: () => selectTVChannel(2), live: 'LIVE' },
+      { title: 'شیر و خورشید', icon: '🦁', action: () => selectTVChannel(0), live: 'LIVE' }
+    ];
+
+    // ==========================================
+    // 3. NEWS & VIDEO FEED ITEMS
+    // ==========================================
+    let feedData = [
+      {
+        type: 'telegram',
+        source: 'کانال رسمی شاهزاده رضا پهلوی',
+        handle: 't.me/rezapahlavi_officiall',
+        channelId: 'rezapahlavi_officiall',
+        icon: '👑',
+        avatarBg: 'linear-gradient(135deg, #d97706, #065f46)',
+        time: 'لحظاتی پیش',
+        title: 'پیام راهبردی شاهزاده رضا پهلوی به ملت ایران و نیروهای مسلح: زمان پیوستن به ملت و بازپس‌گیری ایران است',
+        body: 'هم‌میهنان عزیزم، رژیم جمهوری اسلامی در شکننده‌ترین وضعیت تاریخ خود قرار دارد. همبستگی ملی زیر پرچم شیر و خورشید، اعتصابات سراسری و هماهنگی نیروهای داخل و خارج کشور، مسیر پیروزی نهایی و آزادی ایران را هموار کرده است.',
+        url: 'https://t.me/s/rezapahlavi_officiall'
+      },
+      {
+        type: 'telegram',
+        source: 'ستاد ارتباطات شاهزاده رضا پهلوی',
+        handle: 't.me/rezapahlavicomms',
+        channelId: 'rezapahlavicomms',
+        icon: '🏛️',
+        avatarBg: 'linear-gradient(135deg, #1d4ed8, #0f172a)',
+        time: '۱۰ دقیقه پیش',
+        title: 'گزارش رایزنی‌های فشرده دیپلماتیک و بین‌المللی شاهزاده رضا پهلوی در حمایت از انقلاب ملی ایران',
+        body: 'جزئیات نشست‌های راهبردی شاهزاده رضا پهلوی با سیاست‌گذاران ارشد جهانی جهت پشتیبانی حداکثری از مردم ایران، فلج کردن دستگاه سرکوب جمهوری اسلامی و به رسمیت شناختن خواست ملت ایران برای سرنگونی رژیم.',
+        url: 'https://t.me/s/rezapahlavicomms'
+      },
+      {
+        type: 'telegram',
+        source: 'کانال رسمی فرزاد زرین',
+        handle: 't.me/farzadzarrin',
+        channelId: 'farzadzarrin',
+        icon: '🎙️',
+        avatarBg: 'linear-gradient(135deg, #b91c1c, #31102f)',
+        time: '۱۵ دقیقه پیش',
+        title: 'فرزاد زرین: گزارش فوری از اتاق جنگ؛ ضربات فلج‌کننده به مراکز فرماندهی و سردرگمی سران رژیم',
+        body: 'تحلیل آخرین گزارش‌های میدانی و نظامی از هدف قرار گرفتن پایگاه‌های راهبردی سپاه پاسداران و ریزش شدید در بدنه نیروهای سرکوبگر همزمان با خیزش مردمی در شهرهای مختلف کشور.',
+        url: 'https://t.me/s/farzadzarrin'
+      },
+      {
+        type: 'youtube',
+        source: 'یوتیوب شاهزاده رضا پهلوی',
+        handle: '@OfficialRezaPahlavi',
+        icon: '☀️',
+        avatarBg: 'linear-gradient(135deg, #f59e0b, #1e293b)',
+        time: 'ویدیوی ویژه',
+        title: 'سخنرانی و نقشه راه دوران گذار، بازپس‌گیری ایران و برقراری دموکراسی سکولار',
+        body: 'مشاهده ویدیوی رسمی سخنرانی شاهزاده رضا پهلوی پیرامون برنامه‌های دوران گذار، تضمین یکپارچگی سرزمینی ایران، بازسازی اقتصادی و دادخواهی ملت ایران.',
+        url: 'https://www.youtube.com/@OfficialRezaPahlavi'
+      },
+      {
+        type: 'youtube',
+        source: 'یوتیوب آرش اعلایی (Arash Alaee)',
+        handle: '@ArashAlaee',
+        icon: '🎯',
+        avatarBg: 'linear-gradient(135deg, #0d9488, #0f172a)',
+        time: 'تحلیل نظامی',
+        title: 'تحلیل استراتژیک آرش اعلایی: فروپاشی سپر دفاعی جمهوری اسلامی و معادلات جدید میدان نبرد',
+        body: 'بررسی دقیق و کارشناسی ابعاد نظامی جنگ علیه جمهوری اسلامی، ناتوانی پدافندی و موشکی رژیم و تاثیر مستقیم ضربات نظامی بر تسریع روند سرنگونی و آزادی ایران.',
+        url: 'https://www.youtube.com/results?search_query=Arash+Alaee+Iran'
+      },
+      {
+        type: 'youtube',
+        source: 'یوتیوب فرزاد زرین (Farzad Zarrin)',
+        handle: '@FarzadZarrin',
+        icon: '🔥',
+        avatarBg: 'linear-gradient(135deg, #e11d48, #1e1b4b)',
+        time: 'برنامه زنده',
+        title: 'پخش زنده و تحلیل سیاسی فرزاد زرین: پشت‌پرده تحولات اخیر، جنگ با رژیم و خیزش ملی',
+        body: 'پوشش زنده خبرهای فوری جنگ با جمهوری اسلامی، ارتباط مستقیم با مردم از داخل ایران و بررسی گام‌های بعدی انقلاب ملی شیر و خورشید.',
+        url: 'https://www.youtube.com/results?search_query=Farzad+Zarrin'
+      },
+      {
+        type: 'telegram',
+        source: 'تلگرام ایران اینترنشنال',
+        handle: 't.me/iranintltv',
+        channelId: 'iranintltv',
+        icon: '🚨',
+        avatarBg: 'linear-gradient(135deg, #dc2626, #111827)',
+        time: '۲۵ دقیقه پیش',
+        title: 'گسترش شعارهای شبانه و حرکت‌های اعتراضی در مناطق مختلف تهران، کرج، شیراز و اصفهان',
+        body: 'ویدیوهای دریافتی از شهروندان نشان‌دهنده تداوم و گسترش فریادهای آزادی‌خواهی و شعارهای ملی علیه کلیت نظام جمهوری اسلامی در شهرهای سراسر ایران است.',
+        url: 'https://t.me/s/iranintltv'
+      },
+      {
+        type: 'telegram',
+        source: 'تلگرام صدای آمریکا (VOA Farsi)',
+        handle: 't.me/farsivoa',
+        channelId: 'farsivoa',
+        icon: '🗽',
+        avatarBg: 'linear-gradient(135deg, #2563eb, #0f172a)',
+        time: '۳۰ دقیقه پیش',
+        title: 'مواضع قاطع واشنگتن و متحدان بین‌المللی در برابر تهدیدات نظامی جمهوری اسلامی',
+        body: 'گزارش صدای آمریکا از تصمیمات جدید امنیتی و سیاسی برای مهار کامل رژیم و حمایت از حق مردم ایران برای تعیین سرنوشت خود.',
+        url: 'https://t.me/s/farsivoa'
+      }
+    ];
+
+    let currentTVIndex = 0;
+    let currentFilter = 'all';
+    let playerExpanded = true;
+
+    // ==========================================
+    // 4. THREE CALENDARS (SHAHANSHAHI, SOLAR, GREGORIAN)
+    // ==========================================
+    function toPersianDigits(str) {
+      const p = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
+      return String(str).replace(/\d/g, d => p[d]);
+    }
+
+    function updateCalendars() {
+      const now = new Date();
+      const hh = String(now.getHours()).padStart(2, '0');
+      const mm = String(now.getMinutes()).padStart(2, '0');
+      document.getElementById('clock-display').textContent = `${hh}:${mm}`;
+
+      try {
+        const parts = new Intl.DateTimeFormat('fa-IR-u-ca-persian', {
+          day: 'numeric',
+          month: 'short',
+          year: 'numeric'
+        }).formatToParts(now);
+
+        let day = '', month = '', yearStr = '';
+        parts.forEach(p => {
+          if (p.type === 'day') day = p.value;
+          if (p.type === 'month') month = p.value;
+          if (p.type === 'year') yearStr = p.value;
+        });
+
+        const latinYear = parseInt(yearStr.replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d)), 10);
+        const shahYear = !isNaN(latinYear) ? toPersianDigits(latinYear + 1180) : '۲۵۸۵';
+
+        document.getElementById('date-imperial').textContent = `👑 ${day} ${month} ${shahYear} شاهنشاهی`;
+        document.getElementById('date-solar').textContent = `☀️ ${day} ${month} ${yearStr}`;
+
+        const greg = new Intl.DateTimeFormat('en-US', {
+          month: 'short', day: 'numeric', year: 'numeric'
+        }).format(now);
+        document.getElementById('date-greg').textContent = `🌍 ${greg}`;
+      } catch (e) {}
+    }
+
+    // ==========================================
+    // 5. RENDER STORIES, TV PLAYER & FEED
+    // ==========================================
+    function renderStories() {
+      const container = document.getElementById('stories-row');
+      container.innerHTML = '';
+      storiesData.forEach(st => {
+        const div = document.createElement('div');
+        div.className = 'story-item';
+        div.onclick = st.action;
+        div.innerHTML = `
+          <div class="story-ring">
+            <div class="story-avatar">${st.icon}</div>
+            <span class="story-live-tag">${st.live}</span>
+          </div>
+          <div class="story-label">${st.title}</div>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function renderTVPlayer() {
+      const ch = tvChannels[currentTVIndex];
+      document.getElementById('active-tv-title').textContent = ch.name;
+
+      // Render Channel Pills
+      const pillsBar = document.getElementById('tv-pills-bar');
+      pillsBar.innerHTML = '';
+      tvChannels.forEach((item, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'ch-pill ' + (idx === currentTVIndex ? 'active' : '');
+        btn.innerHTML = `<span>${item.icon}</span> <span>${item.name}</span>`;
+        btn.onclick = () => selectTVChannel(idx);
+        pillsBar.appendChild(btn);
+      });
+
+      const stage = document.getElementById('video-stage');
+      if (!playerExpanded) {
+        stage.style.display = 'none';
+        return;
+      }
+      stage.style.display = 'flex';
+
+      if (ch.ytChannelId) {
+        stage.innerHTML = `
+          <iframe 
+            src="https://www.youtube.com/embed/live_stream?channel=${ch.ytChannelId}&autoplay=1&playsinline=1" 
+            style="width:100%; height:100%; border:none;" 
+            allow="autoplay; encrypted-media; fullscreen; picture-in-picture" 
+            allowfullscreen>
+          </iframe>
+          <a href="${ch.externalUrl}" target="_blank" style="position:absolute; bottom:8px; left:8px; background:rgba(0,0,0,0.75); color:#fbbf24; font-size:10px; padding:4px 8px; border-radius:6px; text-decoration:none; border:1px solid #f59e0b;">
+            پخش مستقیم ↗
+          </a>
+        `;
+      } else {
+        stage.innerHTML = `
+          <div style="text-align:center; padding:16px;">
+            <div style="font-size:38px; margin-bottom:6px;">${ch.icon}</div>
+            <div style="font-size:15px; font-weight:bold; color:#fff;">${ch.name}</div>
+            <div style="font-size:12px; color:#94a3b8; margin:6px 0 12px 0;">${ch.desc}</div>
+            <a href="${ch.externalUrl}" target="_blank" style="background:#f59e0b; color:#000; font-weight:bold; font-size:12px; padding:7px 14px; border-radius:8px; text-decoration:none;">
+              باز کردن پخش زنده ↗
+            </a>
+          </div>
+        `;
+      }
+    }
+
+    function selectTVChannel(idx) {
+      currentTVIndex = idx;
+      playerExpanded = true;
+      document.getElementById('toggle-player-btn').textContent = 'کوچک کردن ▲';
+      renderTVPlayer();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function togglePlayerExpand() {
+      playerExpanded = !playerExpanded;
+      const stage = document.getElementById('video-stage');
+      const btn = document.getElementById('toggle-player-btn');
+      if (playerExpanded) {
+        stage.style.display = 'flex';
+        btn.textContent = 'کوچک کردن ▲';
+        renderTVPlayer();
+      } else {
+        stage.innerHTML = '';
+        stage.style.display = 'none';
+        btn.textContent = 'نمایش ویدیو ▼';
+      }
+    }
+
+    function renderFeed() {
+      const container = document.getElementById('feed-list');
+      let html = '';
+
+      feedData.forEach((item, idx) => {
+        if (currentFilter !== 'all' && item.type !== currentFilter) return;
+        const badgeText = item.type === 'telegram' ? '✈️ تلگرام' : '▶️ یوتیوب';
+        const directBtnLabel = item.type === 'telegram' ? 'نمایش کانال زنده' : 'مشاهده ویدیو';
+
+        html += `
+          <article class="news-card">
+            <div class="card-top-banner">
+              <div class="source-meta">
+                <div class="source-avatar" style="background: ${item.avatarBg};">${item.icon}</div>
+                <div>
+                  <div class="source-name">${item.source}</div>
+                  <div class="source-handle">${item.handle}</div>
+                </div>
+              </div>
+              <span class="post-type-badge">${badgeText}</span>
+            </div>
+
+            <div class="card-content" onclick="openArticleSheet(${idx})">
+              <div class="card-headline">${item.title}</div>
+              <div class="card-excerpt">${item.body}</div>
+            </div>
+
+            <div class="card-actions">
+              <span class="time-stamp">🕒 ${item.time}</span>
+              <div class="action-btns">
+                <button class="btn-read" onclick="openArticleSheet(${idx})">متن کامل</button>
+                <button class="btn-direct" onclick="handleDirectOpen(${idx})">${directBtnLabel} ↗</button>
+              </div>
+            </div>
+          </article>
+        `;
+      });
+
+      container.innerHTML = html;
+    }
+
+    function setFeedFilter(filter, chipEl) {
+      currentFilter = filter;
+      document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+      if (chipEl) chipEl.classList.add('active');
+      renderFeed();
+    }
+
+    function switchBottomTab(tab, btnEl) {
+      document.querySelectorAll('.b-nav-item').forEach(b => b.classList.remove('active'));
+      if (btnEl) btnEl.classList.add('active');
+
+      if (tab === 'home') {
+        currentFilter = 'all';
+        renderFeed();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else if (tab === 'tv') {
+        playerExpanded = true;
+        renderTVPlayer();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else if (tab === 'telegram') {
+        currentFilter = 'telegram';
+        renderFeed();
+      } else if (tab === 'youtube') {
+        currentFilter = 'youtube';
+        renderFeed();
+      }
+    }
+
+    // ==========================================
+    // 6. SHEETS & LIVE TELEGRAM READER
+    // ==========================================
+    function openArticleSheet(idx) {
+      const item = feedData[idx];
+      document.getElementById('sheet-title').textContent = `${item.icon} ${item.source}`;
+      document.getElementById('sheet-content').innerHTML = `
+        <div style="font-size:17px; font-weight:bold; color:#fbbf24; margin-bottom:12px; line-height:1.6;">
+          ${item.title}
+        </div>
+        <div style="font-size:14.5px; color:#f8fafc; white-space:pre-line; line-height:1.95; margin-bottom:20px;">
+          ${item.body}
+        </div>
+        <button class="btn-submit" onclick="handleDirectOpen(${idx})">
+          باز کردن منبع اصلی (${item.handle}) ↗
+        </button>
+      `;
+      document.getElementById('bottom-sheet').classList.add('open');
+    }
+
+    function handleDirectOpen(idx) {
+      const item = feedData[idx];
+      if (item.channelId) {
+        openTelegramWebSheet(item.channelId);
+      } else if (item.url) {
+        openExternalLink(item.url);
+      }
+    }
+
+    function openTelegramWebSheet(channelHandle) {
+      document.getElementById('sheet-title').textContent = `✈️ فید زنده تلگرام @${channelHandle}`;
+      document.getElementById('sheet-content').innerHTML = `
+        <div style="margin-bottom:12px; display:flex; justify-content:space-between; align-items:center;">
+          <span style="font-size:12px; color:#94a3b8;">در حال نمایش آخرین پست‌های کانال:</span>
+          <a href="https://t.me/${channelHandle}" target="_blank" style="background:#38bdf8; color:#000; padding:5px 10px; border-radius:8px; font-size:11px; font-weight:bold; text-decoration:none;">
+            باز کردن در اپ تلگرام ↗
+          </a>
+        </div>
+        <div id="live-tg-box" style="background:#070b14; border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:12px; min-height:320px;">
+          <div style="text-align:center; padding:30px; color:#fbbf24;">⏳ در حال دریافت آخرین پیام‌ها از t.me/s/${channelHandle}...</div>
+        </div>
+      `;
+      document.getElementById('bottom-sheet').classList.add('open');
+      fetchSingleChannelIntoSheet(channelHandle);
+    }
+
+    function openExternalLink(url) {
+      window.open(url, '_blank');
+    }
+
+    function openAddSourceModal() {
+      document.getElementById('sheet-title').textContent = '➕ افزودن کانال تلگرام یا یوتیوب جدید';
+      document.getElementById('sheet-content').innerHTML = `
+        <div style="font-size:12px; color:#cbd5e1; margin-bottom:10px;">
+          آیدی کانال تلگرام (مثلاً farzadzarrin) یا نام کانال یوتیوب را وارد کنید تا به خبرخوان اضافه شود:
+        </div>
+        <input type="text" id="new-src-name" class="form-input" placeholder="عنوان کانال (مثلاً: کانال خبری آزادی)" />
+        <input type="text" id="new-src-id" class="form-input" placeholder="آیدی کانال تلگرام بدون @ (مثلاً: rezapahlavicomms)" />
+        <button class="btn-submit" onclick="saveNewSource()">افزودن به لیست خبرخوان</button>
+      `;
+      document.getElementById('bottom-sheet').classList.add('open');
+    }
+
+    function saveNewSource() {
+      const name = document.getElementById('new-src-name').value.trim();
+      const id = document.getElementById('new-src-id').value.trim().replace('@', '');
+      if (!name || !id) return;
+
+      feedData.unshift({
+        type: 'telegram',
+        source: name,
+        handle: 't.me/' + id,
+        channelId: id,
+        icon: '✈️',
+        avatarBg: 'linear-gradient(135deg, #059669, #0f172a)',
+        time: 'تازه اضافه‌شده',
+        title: `کانال ${name} (@${id}) به فهرست دریافت زنده اضافه شد`,
+        body: 'برای مشاهده آخرین پست‌های زنده این کانال، روی دکمه «نمایش کانال زنده» یا «بروزرسانی زنده» بزنید.',
+        url: 'https://t.me/s/' + id
+      });
+
+      closeSheet();
+      renderFeed();
+      syncTelegramLive();
+    }
+
+    function closeSheet() {
+      document.getElementById('bottom-sheet').classList.remove('open');
+    }
+
+    // ==========================================
+    // 7. NATIVE & PROXY LIVE TELEGRAM FETCHER
+    // ==========================================
+    window.onNativeTelegramData = function(channelHandle, htmlContent) {
+      if (!htmlContent || htmlContent.length < 100) return;
+      try {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(htmlContent, 'text/html');
+        const msgNodes = doc.querySelectorAll('.tgme_widget_message_text');
+        if (!msgNodes || msgNodes.length === 0) return;
+
+        // Update Sheet if open for this channel
+        const sheetBox = document.getElementById('live-tg-box');
+        if (sheetBox) {
+          let sheetHtml = '';
+          const recentNodes = Array.from(msgNodes).slice(-6).reverse();
+          recentNodes.forEach(n => {
+            const txt = n.textContent.trim();
+            if (txt.length > 10) {
+              sheetHtml += `
+                <div style="border-bottom:1px solid rgba(255,255,255,0.08); padding:10px 0; font-size:13.5px; color:#f1f5f9; white-space:pre-line;">
+                  ${txt}
+                </div>
+              `;
+            }
+          });
+          if (sheetHtml) sheetBox.innerHTML = sheetHtml;
+        }
+
+        // Add latest post to main feed
+        const latestText = msgNodes[msgNodes.length - 1].textContent.trim();
+        if (latestText.length > 20) {
+          const exists = feedData.some(f => f.body === latestText);
+          if (!exists) {
+            feedData.unshift({
+              type: 'telegram',
+              source: `پست جدید @${channelHandle}`,
+              handle: `t.me/${channelHandle}`,
+              channelId: channelHandle,
+              icon: '⚡',
+              avatarBg: 'linear-gradient(135deg, #10b981, #065f46)',
+              time: 'هم‌اکنون (زنده)',
+              title: latestText.substring(0, 95) + '...',
+              body: latestText,
+              url: `https://t.me/s/${channelHandle}`
+            });
+            renderFeed();
+          }
+        }
+      } catch (e) {}
+    };
+
+    function fetchSingleChannelIntoSheet(ch) {
+      const targetUrl = 'https://t.me/s/' + ch;
+      if (window.AndroidBridge && window.AndroidBridge.fetchTelegramAsync) {
+        window.AndroidBridge.fetchTelegramAsync(ch, targetUrl);
+      } else {
+        fetch('https://api.allorigins.win/get?url=' + encodeURIComponent(targetUrl))
+          .then(r => r.json())
+          .then(d => {
+            if (d && d.contents) window.onNativeTelegramData(ch, d.contents);
+          })
+          .catch(() => {
+            const box = document.getElementById('live-tg-box');
+            if (box) {
+              box.innerHTML = `<div style="text-align:center; padding:20px; color:#cbd5e1;">برای مشاهده مستقیم پست‌ها در صورت محدودیت اینترنت، روی دکمه آبی «باز کردن در اپ تلگرام» در بالای همین کادر بزنید.</div>`;
+            }
+          });
+      }
+    }
+
+    function syncTelegramLive() {
+      const btn = document.getElementById('sync-btn');
+      btn.innerHTML = '<span>⏳</span> در حال دریافت...';
+      const channels = ['rezapahlavi_officiall', 'rezapahlavicomms', 'farzadzarrin'];
+
+      channels.forEach(ch => {
+        const targetUrl = 'https://t.me/s/' + ch;
+        if (window.AndroidBridge && window.AndroidBridge.fetchTelegramAsync) {
+          window.AndroidBridge.fetchTelegramAsync(ch, targetUrl);
+        } else {
+          fetch('https://api.allorigins.win/get?url=' + encodeURIComponent(targetUrl))
+            .then(r => r.json())
+            .then(d => {
+              if (d && d.contents) window.onNativeTelegramData(ch, d.contents);
+            })
+            .catch(() => {});
+        }
+      });
+
+      setTimeout(() => {
+        btn.innerHTML = '<span>✅</span> بروز شد';
+        setTimeout(() => { btn.innerHTML = '<span>🔄</span> بروزرسانی زنده'; }, 2200);
+      }, 1600);
+    }
+
+    // INIT
+    window.onload = function() {
+      updateCalendars();
+      setInterval(updateCalendars, 15000);
+      renderStories();
+      renderTVPlayer();
+      renderFeed();
+    };
+  </script>
+</body>
+</html>
